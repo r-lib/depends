@@ -549,7 +549,10 @@ stop_task_package_build <- function(state, worker) {
   if (success) {
     alert("success", "Packaged {.pkg {pkg}} {.version {version}} \\
            {.timestamp {ptime}}")
-    ## Need to save the name of the built package
+    ## Remove source package
+    unlink(state$plan$file[pkgidx], recursive = TRUE)
+
+    ## Save the name of the built package
     state$plan$file[pkgidx] <- worker$process$get_built_file()
   } else {
     alert("danger", "Failed to create source package {.pkg {pkg}} \\
@@ -597,6 +600,9 @@ stop_task_build <- function(state, worker) {
   if (success) {
     alert("success", "Built {.pkg {pkg}} {.version {version}} \\
            {.timestamp {ptime}}")
+    ## Remove source package
+    unlink(state$plan$file[pkgidx], recursive = TRUE)
+
     ## Need to save the name of the built package
     state$plan$file[pkgidx] <- worker$process$get_built_file()
   } else {
